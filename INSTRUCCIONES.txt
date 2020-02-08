@@ -3,6 +3,3 @@ proyecto apellidos_nombre
 
 -----------------------------
 Utilizar version java jdk 1.8
-
-
-Hola Mundo
