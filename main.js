@@ -1,4 +1,4 @@
-window.onload = traerDatos;
+window.onload = traerSoloDiez;
 var httpreq = new XMLHttpRequest();
 var createRowa = document.createElement("tr");
 var arraybtnedit = [];
@@ -6,7 +6,7 @@ var arraybtndel = [];
 var i = 0;
 var aux_id;
 var id;
-
+var empezaren =0
 
 
 function traerDatos() {
@@ -140,7 +140,7 @@ function addActionsBtn() {
                 let datos = JSON.parse(httpreq.responseText)
                 let cliente = JSON.stringify(datos);
                 localStorage.setItem("cliente", cliente);
-                window.location.href = './envios.html';
+                window.location.href = './tipo_envio.html';
 
             } else {
                 Swal.fire({
