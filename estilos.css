@@ -1,0 +1,21 @@
+.navbar-brand{
+    margin:10px;
+    
+}
+.fa-cube{
+    color:white;
+    font-size:30px;
+}
+.title-class{
+    font-weight: 300;
+}
+
+.bg-myred{
+    background-color: rgb(60, 83, 216);
+    color:#fff;
+}
+.bg-myredb:hover{
+    background-color: rgb(12, 190, 66);
+    color:#fff;
+}
+ 

@@ -1,0 +1,5 @@
+fichero apellidos_nombre
+proyecto apellidos_nombre
+
+-----------------------------
+Utilizar version java jdk 1.8
