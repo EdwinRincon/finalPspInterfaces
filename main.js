@@ -32,7 +32,7 @@ function miBuscar() {
             }
         }
         if (visible === true) {
-            encabezados.innerHTML =""
+            encabezados.innerHTML = ""
             encabezados.innerHTML = `
             <tr>
             <th>ID</th>
@@ -47,7 +47,7 @@ function miBuscar() {
             tr[i].style.display = "";
         } else {
             tr[i].style.display = "none";
-            encabezados.innerHTML =""
+            encabezados.innerHTML = ""
             encabezados.innerHTML = `
             <tr>
             <th>ID</th>
@@ -144,33 +144,37 @@ function addActionsBtn() {
         id = $(this).attr("id")
         aux_id = id.replace("botonEditar", "")
 
-        httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes/' + aux_id)
+        httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes/' + aux_id, true)
         httpreq.send();
         httpreq.onload = function () {
             if (httpreq.readyState == 4) {
                 if (httpreq.status == 200) {
                     //rellena los datos del cliente seleccionado en los campos del model 
                     let datos = JSON.parse(httpreq.responseText)
+                    document.getElementById("inputeditarid").value = datos.idCliente;
                     document.getElementById("inputeditarcifnif").value = datos.CIFNIF;
                     document.getElementById("inputeditardir").value = datos.direccionFacturacion;
                     document.getElementById("inputeditarnombre").value = datos.nombreCliente;
 
                     // cuando le de click al boton guardar edicion del model en editar cliente
                     document.getElementById("btnModificar").addEventListener("click", function () {
+                        let cifnif = document.getElementById("inputeditarcifnif").value
+                        let direccion = document.getElementById("inputeditardir").value
+                        let nombrecliente = document.getElementById("inputeditarnombre").value
                         var datosActualizar = {
-                            "CIFNIF": document.getElementById("inputeditarcifnif").value,
-                            "direccionFacturacion": document.getElementById("inputeditardir").value,
-                            "idCliente": 0,
-                            "nombreCliente": document.getElementById("inputeditarnombre").value
-                        }
-
-                        httpreq.open('PUT', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes')
-                        httpreq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                            "CIFNIF": cifnif,
+                            "direccionFacturacion": direccion,
+                            "idCliente": document.getElementById("inputeditarid").value,
+                            "nombreCliente": nombrecliente
+                        };
                         var datosEditados = JSON.stringify(datosActualizar)
 
+                        httpreq.open('PUT', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes', true)
+                        httpreq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                         httpreq.onload = function () {
                             if (httpreq.readyState == 4) {
                                 if (httpreq.status == 200) {
+
                                     Swal.fire({
 
                                         title: 'Cliente Editado',
@@ -187,7 +191,6 @@ function addActionsBtn() {
 
                     });
                 } else {
-
                     Swal.fire({
 
                         title: 'Error',
