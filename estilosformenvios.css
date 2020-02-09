@@ -24,7 +24,7 @@ a:hover {
 }
 
 .form {
-  background: rgb(22, 33, 39);
+  background: rgba(24, 87, 119, 0.863);
   padding: 40px;
   max-width: 600px;
   margin: 40px auto;
@@ -75,7 +75,7 @@ h1 {
   margin: 0 0 40px;
 }
 
-label#nombre,label#dni,label#direccion {
+label#nombre,label#dni,label#direccion,label#cp {
   position: absolute;
   -webkit-transform: translateY(6px);
           transform: translateY(6px);
@@ -86,33 +86,29 @@ label#nombre,label#dni,label#direccion {
   -webkit-backface-visibility: hidden;
   pointer-events: none;
   font-size: 22px;
-}
-
-
-label#nombre,label#dni,label#direccion  {
   margin: 2px;
-  color: #1ab188;
+  color: #ffffff;
 }
 
-label#nombre.active,label#dni.active,label#direccion.active {
+
+
+label#nombre.active,label#dni.active,label#direccion.active,label#cp.active {
   -webkit-transform: translateY(50px);
           transform: translateY(50px);
   left: 2px;
   font-size: 14px;
 }
-label#nombre.active  .req,label#dni.active .req,label#direccion.active .req {
+label#nombre.active  .req,label#dni.active .req,label#direccion.active .req,label#cp.active .req {
   opacity: 0;
 }
 
-label#nombre.highlight,label#dni.highlight,label#direccion.highlight {
+label#nombre.highlight,label#dni.highlight,label#direccion.highlight,label#cp.highlight {
   color: #ffffff;
 }
 
 input::placeholder{
   color:blue;
 }
-
-
 
 
 input,
@@ -236,4 +232,25 @@ background: blue;
 
 label.container{
   color:#ffff;
+}
+
+
+
+
+
+
+.select-selected {
+  background-color: DodgerBlue;
+}
+
+/* Style the arrow inside the select element: */
+.select-selected:after {
+  position: absolute;
+  content: "";
+  top: 14px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-color: #fff transparent transparent transparent;
 }
