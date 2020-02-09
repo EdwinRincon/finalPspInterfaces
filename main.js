@@ -173,8 +173,8 @@ function addActionsBtn() {
                                 if (httpreq.status == 200) {
                                     Swal.fire({
 
-                                        title: 'Cliente Creado',
-                                        text: 'Se ha creado un registro',
+                                        title: 'Cliente Editado',
+                                        text: 'Se ha editado un registro',
                                         icon: 'success',
                                         onClose: () => {
                                             window.location.reload(true)
