@@ -93,7 +93,7 @@ function traerSoloDiez() {
 }
 //******* ANADIDO POR MI EL 8 DEL 02 BORRAR * */
 
-//  EDITAR Y ELIMINAR
+//  EDITAR 
 function addActionsBtn() {
 
 
@@ -101,7 +101,8 @@ function addActionsBtn() {
         id = $(this).attr("id")
         aux_id = id.replace("botonEditar", "")
 
-        //document.getElementById('botonEliminar' + $(this).attr("id")).addEventListener("click",function(){   })
+        
+        
         httpreq.open('PUT', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes/' + aux_id)
         httpreq.send();
         httpreq.onload = function () {
@@ -255,6 +256,3 @@ document.getElementById('btnAnterior').addEventListener("click",function(){
     
 })
 
-/**function siguiente() {
-   
-}**/

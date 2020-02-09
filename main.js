@@ -6,8 +6,62 @@ var arraybtndel = [];
 var i = 0;
 var aux_id;
 var id;
-var empezaren =0
+var empezaren = 0
 
+
+document.getElementById("inputBuscar").addEventListener("keyup", miBuscar);
+
+// filtrar en la tabla
+function miBuscar() {
+    // Declare variables 
+    var input, filter, table, tr, td, i, j, visible;
+    input = document.getElementById("inputBuscar");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
+    let encabezados = document.querySelector('#encabezados');
+
+    // Loop through all table rows, and hide those who don't match the search query
+    for (i = 0; i < tr.length; i++) {
+        visible = false;
+        /* Obtenemos todas las celdas de la fila, no sólo la primera */
+        td = tr[i].getElementsByTagName("td");
+        for (j = 0; j < td.length; j++) {
+            if (td[j] && td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                visible = true;
+            }
+        }
+        if (visible === true) {
+            encabezados.innerHTML =""
+            encabezados.innerHTML = `
+            <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>CIF/NIF</th>
+            <th>Dirección Facturación</th>
+            <th>Editar</th>
+            <th>Envío</th>
+            <th>Eliminar</th>
+          </tr>
+                     `
+            tr[i].style.display = "";
+        } else {
+            tr[i].style.display = "none";
+            encabezados.innerHTML =""
+            encabezados.innerHTML = `
+            <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>CIF/NIF</th>
+            <th>Dirección Facturación</th>
+            <th>Editar</th>
+            <th>Envío</th>
+            <th>Eliminar</th>
+          </tr>
+        `
+        }
+    }
+}
 
 function traerDatos() {
     httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes')
@@ -58,10 +112,11 @@ function traerSoloDiez() {
                      <td>  ${item.nombreCliente}  </td> 
                      <td>  ${item.CIFNIF}  </td> 
                      <td>  ${item.direccionFacturacion}  </td>
-                     <td>  <button name="btnEditar" id="botonEditar${item.idCliente}"` + `  class="btn  btn-warning"> <i class="fas fa-user-edit"></i></td>
+                     <td>  <button name="btnEditar" id="botonEditar${item.idCliente}"` + `  class="btn  btn-warning" data-toggle="modal"
+                     data-target="#ModalEditCliente"> <i class="fas fa-user-edit"></i></td>
                      <td>  <button name="btnEnvio" id="botonEnvio${item.idCliente}"` + `  class="btn btn-info"> <i class="fas fa-shipping-fast"></i>  </td>
-                     
-                     <td>  <button  name="btnEliminar" id="botonEliminar${item.idCliente}"` + `  class="btn btn-danger"> <i class="fas fa-user-times"></i>  </tr>
+                     <td>  <button  name="btnEliminar" id="botonEliminar${item.idCliente}"` + `  class="btn btn-danger"> <i class="fas fa-user-times"></i>  
+                     </tr>
                      `
                     i++;
                 }
@@ -81,19 +136,11 @@ function traerSoloDiez() {
     }
     httpreq.send();
 }
-//  EDITAR Y ELIMINAR
+//  EDITAR
 function addActionsBtn() {
 
 
     $('[name=btnEditar]').on('click', function (e) {
-
-        /*  $('#ModalEditCliente').modal('show')
-          $('#btnModificar').on('click', function(evento) {
-                  
-                      console.log("cliente editado") 
-                
-          })*/
-
         id = $(this).attr("id")
         aux_id = id.replace("botonEditar", "")
 
@@ -102,9 +149,43 @@ function addActionsBtn() {
         httpreq.onload = function () {
             if (httpreq.readyState == 4) {
                 if (httpreq.status == 200) {
+                    //rellena los datos del cliente seleccionado en los campos del model 
+                    let datos = JSON.parse(httpreq.responseText)
+                    document.getElementById("inputeditarcifnif").value = datos.CIFNIF;
+                    document.getElementById("inputeditardir").value = datos.direccionFacturacion;
+                    document.getElementById("inputeditarnombre").value = datos.nombreCliente;
 
+                    // cuando le de click al boton guardar edicion del model en editar cliente
+                    document.getElementById("btnModificar").addEventListener("click", function () {
+                        var datosActualizar = {
+                            "CIFNIF": document.getElementById("inputeditarcifnif").value,
+                            "direccionFacturacion": document.getElementById("inputeditardir").value,
+                            "idCliente": 0,
+                            "nombreCliente": document.getElementById("inputeditarnombre").value
+                        }
 
+                        httpreq.open('PUT', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes')
+                        httpreq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                        var datosEditados = JSON.stringify(datosActualizar)
 
+                        httpreq.onload = function () {
+                            if (httpreq.readyState == 4) {
+                                if (httpreq.status == 200) {
+                                    Swal.fire({
+
+                                        title: 'Cliente Creado',
+                                        text: 'Se ha creado un registro',
+                                        icon: 'success',
+                                        onClose: () => {
+                                            window.location.reload(true)
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                        httpreq.send(datosEditados)
+
+                    });
                 } else {
 
                     Swal.fire({
