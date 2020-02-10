@@ -3,6 +3,8 @@ window.onload = traerNombre;
 var httpreq = new XMLHttpRequest();
 
 var idDestinatario
+var estadoEnvioChecked
+
 
 function traerNombre() {
     cliente = localStorage.getItem('cliente')
@@ -29,7 +31,6 @@ function traerNombre() {
         }
     }
     httpreq.send();
-    //localStorage.clear()
 }
 // A?adir a los campos de destinatario cuando cambias de destinatario en el Select
 document.getElementById("select").addEventListener("change", function() {
@@ -74,6 +75,13 @@ document.getElementById("submit").addEventListener("click", function () {
             icon: 'error',
         })
     }else{
+        if (document.getElementById('RPendiente').checked){
+            estadoEnvioChecked = "PR"
+        }else if(document.getElementById('ROficina').checked ){
+            estadoEnvioChecked = "OO"
+        }
+
+
         var datosActualizar = {
             "DNINIF":document.getElementById("indni").value,
             "codigoPostal":document.getElementById("incp").value ,
@@ -88,20 +96,44 @@ document.getElementById("submit").addEventListener("click", function () {
                         httpreq.onload = function () {
                             if (httpreq.readyState == 4) {
                                 if (httpreq.status == 200) {
-
-                                    Swal.fire({
-
-                                        title: 'Envio Creado',
-                                        text: 'Se ha editado un registro',
-                                        icon: 'success',
-                                        onClose: () => {
-                                            window.location.reload(true)
-                                        }
-                                    });
                                 }
                             }
                         }
                         httpreq.send(datosEditados)
                         /*actualizar destinatarios*/
+        
+        // INSERT nuevo envio
+        let envio = {
+    "DNINIF": document.getElementById("indni").value,
+    "codigoPostal": document.getElementById("incp").value,
+    "direccionCompleta": document.getElementById("indireccion").value,
+    "idCliente": datosCliente.idCliente,
+    "idEnvio": 0,
+    "idEstadoEnvio": estadoEnvioChecked,
+    "nombreDestinatario": document.getElementById("select").value,
+    "numIntentosEntrega": 0
+        }
+        httpreq.open('POST', 'http://localhost:8080/EjemploRestJDBC/webapi/envios')
+        httpreq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    
+        let jsonstring = JSON.stringify(envio)
+    
+        httpreq.onload = function () {
+            if (httpreq.readyState == 4) {
+                if (httpreq.status == 200) {
+                    Swal.fire({
+    
+                        title: 'Envio Creado',
+                        text: 'Se ha creado un registro',
+                        icon: 'success',
+                        onClose: () => {
+                            window.location.reload(true)
+                        }
+                    });
+                }
+            }
+        }
+        httpreq.send(jsonstring)
     }
+     //localStorage.clear()
 });
