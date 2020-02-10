@@ -121,4 +121,6 @@ httpreq.onload = function () {
         httpreq.send(jsonstring)
     }
 localStorage.clear()
+
+    
 });
