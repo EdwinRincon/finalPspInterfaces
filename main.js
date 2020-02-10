@@ -64,14 +64,13 @@ function miBuscar() {
 }
 
 function traerDatos() {
-    httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes')
-    httpreq.onload = function () {
-        if (httpreq.readyState == 4) {
-            if (httpreq.status == 200) {
-                let datos = JSON.parse(this.responseText)
-                for (let item of datos) {
-                    i++;
-                }
+httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes')
+httpreq.onload = function () {
+    if (httpreq.readyState == 4) {
+        if (httpreq.status == 200) {
+            let datos = JSON.parse(this.responseText)
+            for (let item of datos) {
+                i++;}
             } else {
                 Swal.fire({
                     title: 'Error',
@@ -98,13 +97,10 @@ function traerSoloDiez() {
     httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes/query?empezaren=' + empezaren)
     httpreq.onload = function () {
         if (httpreq.readyState == 4) {
-
             if (httpreq.status == 200) {
                 let datos = JSON.parse(this.responseText)
-
-                let res = document.querySelector('#tabla_clientes');
+                let res = document.getElementById("tabla_clientes");
                 res.innerHTML = '';
-
                 for (let item of datos) {
                     res.innerHTML += `
                      <tr> 
@@ -120,10 +116,10 @@ function traerSoloDiez() {
                      `
                     i++;
                 }
+                /*Agrega accion click a cada boton despues de que se crean todos los registros*/
                 addActionsBtn();
             } else {
                 Swal.fire({
-
                     title: 'Error',
                     text: 'La conexión al servidor falló.',
                     icon: 'question',
@@ -138,12 +134,9 @@ function traerSoloDiez() {
 }
 //  EDITAR
 function addActionsBtn() {
-
-
     $('[name=btnEditar]').on('click', function (e) {
         id = $(this).attr("id")
         aux_id = id.replace("botonEditar", "")
-
         httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes/' + aux_id, true)
         httpreq.send();
         httpreq.onload = function () {
@@ -151,7 +144,6 @@ function addActionsBtn() {
                 if (httpreq.status == 200) {
                     //rellena los datos del cliente seleccionado en los campos del model 
                     let datos = JSON.parse(httpreq.responseText)
-                    document.getElementById("inputeditarid").value = datos.idCliente;
                     document.getElementById("inputeditarcifnif").value = datos.CIFNIF;
                     document.getElementById("inputeditardir").value = datos.direccionFacturacion;
                     document.getElementById("inputeditarnombre").value = datos.nombreCliente;
@@ -164,19 +156,16 @@ function addActionsBtn() {
                         var datosActualizar = {
                             "CIFNIF": cifnif,
                             "direccionFacturacion": direccion,
-                            "idCliente": document.getElementById("inputeditarid").value,
+                            "idCliente": datos.idCliente,
                             "nombreCliente": nombrecliente
                         };
                         var datosEditados = JSON.stringify(datosActualizar)
-
                         httpreq.open('PUT', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes', true)
                         httpreq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                         httpreq.onload = function () {
                             if (httpreq.readyState == 4) {
                                 if (httpreq.status == 200) {
-
                                     Swal.fire({
-
                                         title: 'Cliente Editado',
                                         text: 'Se ha editado un registro',
                                         icon: 'success',
@@ -192,7 +181,6 @@ function addActionsBtn() {
                     });
                 } else {
                     Swal.fire({
-
                         title: 'Error',
                         text: 'La conexión al servidor falló.',
                         icon: 'question',
@@ -207,25 +195,21 @@ function addActionsBtn() {
     })
 
     // ENVIO
-    $('[name=btnEnvio]').on('click', function (e) {
-
-        id = $(this).attr("id")
-        aux_id = id.replace("botonEnvio", "")
-        httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes/' + aux_id)
-        httpreq.onload = llenarEnvio
-        httpreq.send();
-
-    })
-    function llenarEnvio() {
-        if (httpreq.readyState == 4) {
-
-            if (httpreq.status == 200) {
-
-                let datos = JSON.parse(httpreq.responseText)
-                let cliente = JSON.stringify(datos);
-                localStorage.setItem("cliente", cliente);
-                window.location.href = './tipo_envio.html';
-
+$('[name=btnEnvio]').on('click', function (e) {
+id = $(this).attr("id")
+aux_id = id.replace("botonEnvio", "")
+httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes/' + aux_id)
+httpreq.onload = llenarEnvio
+httpreq.send();
+})
+    
+function llenarEnvio() {
+    if (httpreq.readyState == 4) {
+        if (httpreq.status == 200) {
+            let datos = JSON.parse(httpreq.responseText)
+            let cliente = JSON.stringify(datos);
+            localStorage.setItem("cliente", cliente);
+            window.location.href = './tipo_envio.html';
             } else {
                 Swal.fire({
                     title: 'Error',
@@ -240,33 +224,27 @@ function addActionsBtn() {
     }
 
     // ELIMINAR CLIENTE AL CLICK BOTON
-    $('[name=btnEliminar]').on('click', function (e) {
-
-        id = $(this).attr("id")
-        aux_id = id.replace("botonEliminar", "")
-        httpreq.open('DELETE', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes/' + aux_id)
-        httpreq.onload = function () {
-            if (httpreq.readyState == 4) {
-                if (httpreq.status == 200) {
-                    // alert("Se ha borrado un registro")
-                    Swal.fire({
-
-                        title: 'Cliente Eliminado',
-                        text: 'Se ha borrado un registro',
-                        icon: 'success',
-                        onClose: () => {
-                            window.location.reload(true)
-                        }
-                    })
+$('[name=btnEliminar]').on('click', function (e) {
+id = $(this).attr("id")
+aux_id = id.replace("botonEliminar", "")
+httpreq.open('DELETE', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes/' + aux_id)
+httpreq.onload = function () {
+    if (httpreq.readyState == 4) {
+        if (httpreq.status == 200) {
+            Swal.fire({
+                title: 'Cliente Eliminado',
+                text: 'Se ha borrado un registro',
+                icon: 'success',
+                onClose: () => {
+                window.location.reload(true)
+                }})
                 } else {
-                    //alert("Error al conectarse con el servidor: " + httpreq.status)
                     Swal.fire({
-
                         title: 'Error',
                         text: 'La conexión al servidor falló.',
                         icon: 'question',
                         onClose: () => {
-                            window.location.reload(true)
+                        window.location.reload(true)
                         }
                     })
                 }
@@ -278,28 +256,24 @@ function addActionsBtn() {
 
 // AÑADIR CLIENTE
 document.getElementById('btnInsertar').addEventListener("click", function () {
-    let cliente = {
-
-        "CIFNIF": document.getElementById("inputcifnif").value,
-        "direccionFacturacion": document.getElementById("inputdir").value,
-        "idCliente": 0,
-        "nombreCliente": document.getElementById("inputnombre").value
-    }
-    httpreq.open('POST', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes')
-    httpreq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-
-    let jsonstring = JSON.stringify(cliente)
-
+let cliente = {
+    "CIFNIF": document.getElementById("inputcifnif").value,
+    "direccionFacturacion": document.getElementById("inputdir").value,
+    "idCliente": 0,
+    "nombreCliente": document.getElementById("inputnombre").value
+}
+httpreq.open('POST', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes')
+httpreq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+let jsonstring = JSON.stringify(cliente)
     httpreq.onload = function () {
         if (httpreq.readyState == 4) {
             if (httpreq.status == 200) {
                 Swal.fire({
-
                     title: 'Cliente Creado',
                     text: 'Se ha creado un registro',
                     icon: 'success',
                     onClose: () => {
-                        window.location.reload(true)
+                    window.location.reload(true)
                     }
                 });
             }

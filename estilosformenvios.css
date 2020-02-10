@@ -5,7 +5,7 @@
 }
 
 html {
-  overflow-y: scroll; 
+  overflow-y: scroll;
 }
 
 body {
@@ -75,45 +75,27 @@ h1 {
   margin: 0 0 40px;
 }
 
-label#nombre,label#dni,label#direccion,label#cp {
+label#nombreDes,
+label#dni,
+label#direccion,
+label#cp {
   position: absolute;
-  -webkit-transform: translateY(6px);
-          transform: translateY(6px);
-  left: 13px;
   color: rgba(250, 250, 250, 0.5);
-  -webkit-transition: all 0.25s ease;
-  transition: all 0.25s ease;
-  -webkit-backface-visibility: hidden;
   pointer-events: none;
+  font-size: 15px;
+  color: #c3dfff;
+}
+
+label#nombre {
+  position: absolute;
+  left: 13px;
   font-size: 22px;
-  margin: 2px;
   color: #ffffff;
+  pointer-events: none;
 }
-
-
-
-label#nombre.active,label#dni.active,label#direccion.active,label#cp.active {
-  -webkit-transform: translateY(50px);
-          transform: translateY(50px);
-  left: 2px;
-  font-size: 14px;
-}
-label#nombre.active  .req,label#dni.active .req,label#direccion.active .req,label#cp.active .req {
-  opacity: 0;
-}
-
-label#nombre.highlight,label#dni.highlight,label#direccion.highlight,label#cp.highlight {
-  color: #ffffff;
-}
-
-input::placeholder{
-  color:blue;
-}
-
 
 input,
 textarea {
-  
   font-size: 22px;
   display: block;
   width: 100%;
@@ -157,61 +139,58 @@ textarea {
   margin: 0;
 }
 
-
 /*RADIOS*/
 
-.radios{
+.radios {
   padding-bottom: 2vw;
- 
 }
 /* Customize the label (the container) */
 form .container {
-display: block;
-position: relative;
-float: left;
-padding-left: 35px;
-margin-bottom: 12px;
-cursor: pointer;
-font-size: 15px;
-user-select: none;
+  display: block;
+  position: relative;
+  float: left;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 15px;
+  user-select: none;
 }
 
 /* Hide the browser's default radio button */
 form .container input {
-position: absolute;
-opacity: 0;
-cursor: pointer;
-height: 0;
-width: 0;
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
 }
 
 /* Create a custom radio button */
 form .checkmark {
-position: absolute;
-top: 0;
-left: 0;
-height: 25px;
-width: 25px;
-background-color: #eee;
-border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border-radius: 50%;
 }
 
 /* On mouse-over, add a grey background color */
 form .container:hover input ~ .checkmark {
-background-color: #ccc;
+  background-color: #ccc;
 }
 
 /* When the radio button is checked, add a blue background */
 form .container input:checked ~ .checkmark {
-background-color: #2196f3;
+  background-color: #2196f3;
 }
 
 /* Create the indicator (the dot/circle - hidden when not checked) */
 form .checkmark:after {
-
-content: "";
-position: absolute;
-display: none;
+  content: "";
+  position: absolute;
+  display: none;
 }
 
 /* Show the indicator (dot/circle) when checked */
@@ -222,22 +201,17 @@ form .container input:checked ~ .checkmark:after {
 
 /* Style the indicator (dot/circle) */
 form.container .checkmark:after {
-top: 9px;
-left: 9px;
-width: 8px;
-height: 8px;
-border-radius: 50%;
-background: blue;
+  top: 9px;
+  left: 9px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: blue;
 }
 
-label.container{
-  color:#ffff;
+label.container {
+  color: #ffff;
 }
-
-
-
-
-
 
 .select-selected {
   background-color: DodgerBlue;
