@@ -1,10 +1,13 @@
 
 window.onload = traerNombre;
 var httpreq = new XMLHttpRequest();
+
+var idDestinatario
+
 function traerNombre() {
     cliente = localStorage.getItem('cliente')
     datosCliente = JSON.parse(cliente);
-    document.getElementById("nombre").innerHTML = datosCliente.nombreCliente
+    document.getElementById("nombre").innerText = datosCliente.nombreCliente
 
     httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/destinatarios/' + datosCliente.idCliente)
     httpreq.onload = function () {
@@ -13,16 +16,14 @@ function traerNombre() {
                 let datosDestinatario = JSON.parse(this.responseText)
                 let select = document.querySelector("#select")
                 select.innerHTML = '';
-                select.innerHTML = `<option disabled required>Elegir Destinatario</option>`;
-                console.log(datosDestinatario);
+                select.innerHTML = `<option disabled>Elegir Destinatario</option>`;
+                
                 for (let item of datosDestinatario) {
-                    
-                    
                     select.innerHTML += `
                     <option>${item.nombreDestinatario}</option> `
+                   
                 }
                 select.selectedIndex = "0";
-                
             } else {
             }
         }
@@ -36,29 +37,71 @@ document.getElementById("select").addEventListener("change", function() {
     {
         var aux_nameDestinatario = document.getElementById("select").value
 
-    httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/destinatarios/name/'+"\""+aux_nameDestinatario+"\"" )
+    httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/destinatarios/name/'+"\""+aux_nameDestinatario+"\"")
     httpreq.onload = function () {
         if (httpreq.readyState == 4) {
             if (httpreq.status == 200) {
                 let datosDestinatario = JSON.parse(this.responseText)
-                document.getElementById("dni").innerText = datosDestinatario.DNINIF;
-                document.getElementById("direccion").innerText = datosDestinatario.direccionCompleta;
-                document.getElementById("cp").innerText = datosDestinatario.codigoPostal;
+                document.getElementById("indni").value = datosDestinatario.DNINIF;
+                document.getElementById("indireccion").value = datosDestinatario.direccionCompleta;
+                document.getElementById("incp").value = datosDestinatario.codigoPostal; 
+                idDestinatario= datosDestinatario.idDestinatario
             }
         }
     }
     httpreq.send();
-
-
     }
 });
 
 
+
+
 document.getElementById("submit").addEventListener("click", function () {
-
-    if (!document.getElementById('RPendiente').checked && !document.getElementById('ROficina').checked)
+    
+    if (!document.getElementById('RPendiente').checked && !document.getElementById('ROficina').checked )
     {
-        alert("chekea tus checks")
-    }
+        Swal.fire({
+            title: 'Error',
+            text: 'Elige un estado de envio',
+            icon: 'error',
+            
+        })
+    }else if(document.getElementById("indni").value=="" || document.getElementById("indireccion").value=="" || document.getElementById("incp").value=="")
+    {
+        Swal.fire({
+            title: 'Error',
+            text: 'Completa los campos vacios ',
+            icon: 'error',
+        })
+    }else{
+        var datosActualizar = {
+            "DNINIF":document.getElementById("indni").value,
+            "codigoPostal":document.getElementById("incp").value ,
+            "direccionCompleta": document.getElementById("indireccion").value,
+            "idDestinatario": idDestinatario,
+            "idcliente":  0,
+            "nombreDestinatario": document.getElementById("select").value
+        };
+        var datosEditados = JSON.stringify(datosActualizar)
+        httpreq.open('PUT', 'http://localhost:8080/EjemploRestJDBC/webapi/destinatarios', true)
+                        httpreq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                        httpreq.onload = function () {
+                            if (httpreq.readyState == 4) {
+                                if (httpreq.status == 200) {
 
+                                    Swal.fire({
+
+                                        title: 'Envio Creado',
+                                        text: 'Se ha editado un registro',
+                                        icon: 'success',
+                                        onClose: () => {
+                                            window.location.reload(true)
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                        httpreq.send(datosEditados)
+                        /*actualizar destinatarios*/
+    }
 });
