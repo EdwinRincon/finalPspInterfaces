@@ -7,6 +7,7 @@ var i = 0;
 var aux_id;
 var id;
 var empezaren = 0
+var paginas = 0
 
 
 document.getElementById("inputBuscar").addEventListener("keyup", miBuscar);
@@ -63,7 +64,7 @@ function miBuscar() {
     }
 }
 
-function traerDatos() {
+function totalRegistros() {
 httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes')
 httpreq.onload = function () {
     if (httpreq.readyState == 4) {
@@ -87,12 +88,7 @@ httpreq.onload = function () {
     return i;
 }
 function traerSoloDiez() {
-    // total = traerDatos();
-    if (empezaren <= 0) {
-        document.getElementById("btnAnterior").style.display = "none"
-    } else {
-        document.getElementById("btnAnterior").style.display = "block"
-    }
+
 
     httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes/query?empezaren=' + empezaren)
     httpreq.onload = function () {
@@ -283,13 +279,28 @@ let jsonstring = JSON.stringify(cliente)
 });
 
 
+
+
+
+function paginacion(){
+
+    if (empezaren <= 0) {
+        document.getElementById("btnAnterior").style.display = "none"
+    } else {
+        document.getElementById("btnAnterior").style.display = "block"
+    }
+    if (paginas < totalRegistros) {
+        document.getElementById('btnSiguiente').style.display = 'block'
+    } else {
+        document.getElementById('btnSiguiente').style.display = 'none'
+    }
+}
+
 document.getElementById('btnSiguiente').addEventListener("click", function () {
     empezaren += 10;
-    traerSoloDiez();
+    paginas +=1;
 });
-
 document.getElementById('btnAnterior').addEventListener("click", function () {
-
     empezaren -= 10;
     traerSoloDiez();
 })
