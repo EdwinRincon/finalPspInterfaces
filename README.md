@@ -22,7 +22,7 @@
 
  ### Gestión Envíos:
 ![Imagen Seleccionar Envios](envios1.PNG) 
-![Imagen Envios](formulario1.PNG)
+![Imagen Envios](formulario1.png)
 
 * Tecnologías utilizadas:
     * Fontend:
