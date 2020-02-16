@@ -1,0 +1,36 @@
+.navbar-brand{
+    margin:10px;
+    
+}
+.fa-cube{
+    color:white;
+    font-size:30px;
+}
+.title-class{
+    font-weight: 300;
+}
+
+.bg-myred{
+    background-color: rgb(60, 83, 216);
+    color:#fff;
+}
+.bg-myredb:hover{
+    background-color: rgb(12, 190, 66);
+    color:#fff;
+}
+
+#btnSiguiente{
+    margin-left: 5px;
+}
+
+/*Filtar*/
+#inputBuscar {
+   
+    background-position: 10px 12px; /* Position the search icon */
+    background-repeat: no-repeat; /* Do not repeat the icon image */
+    width: 100%; /* Full-width */
+    font-size: 16px; /* Increase font-size */
+    padding: 12px 20px 12px 40px; /* Add some padding */
+    border: 1px solid #ddd; /* Add a grey border */
+    margin-bottom: 12px; /* Add some space below the input */
+}

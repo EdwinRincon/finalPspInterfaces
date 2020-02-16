@@ -1,8 +1,0 @@
-fichero apellidos_nombre
-proyecto apellidos_nombre
-----------------------------
-Contribuidores :
-Edwin Rincon Cardona
-
------------------------------
-Utilizar version java jdk 1.8

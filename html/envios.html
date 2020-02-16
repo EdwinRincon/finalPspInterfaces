@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>CEEP EXPRESS - Envios</title>
+  <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/starter-template/">
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <!-- iconos -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+    integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+  <link rel="stylesheet" href="estilos.css">
+  <link rel="stylesheet" href="estilosformenvios.css">
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.2/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
+</head>
+<body>
+  <nav class="navbar navbar-expand-md navbar-dark bg-myred">
+    <i class="fas fa-cube"></i>
+    <a class="navbar-brand title-class" href="#">CeepExpress</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+      aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="index.html"><i class="fas fa-users"></i> Clientes <span
+              class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="envios.html"><i class="fas fa-box"></i> Envíos</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <!-- INICIO FORM-->
+  <div class="form">
+    <div class="tab-content">
+      <form action="" method="post">
+          <div class="field-wrap">
+            <label id="nombre">Nombre<span class="req"></span></label>
+            <input id="innombre" type="text" required autocomplete="off" disabled/>
+          </div>
+           <!--DropDown-->
+           <div class="form-group">
+            <select id="select" class="form-control" required>
+            </select>
+          </div>
+           <!--Nombre Destinatario-->
+          <div class="field-wrap">
+            <input id="innombreDes" type="text" required autocomplete="off" />
+            <label id="nombreDes">Nombre Destinatario<span class="req"></span></label>
+          </div>
+         <!--dni-->
+          <div class="field-wrap">
+            <input id="indni" type="text" required autocomplete="off" />
+            <label id="dni">DNI/NIF<span class="req"></span></label>  
+          </div>
+          <!--Direccion Completa-->
+          <div class="field-wrap">
+            <input id="indireccion" type="text" required autocomplete="off" />
+            <label id="direccion">Direccion<span class="req"></span></label> 
+          </div>
+            <!--Codigo postal-->
+            <div class="field-wrap">
+              <input id="incp" type="text" required autocomplete="off" />
+              <label id="cp">Codigo Postal<span class="req"></span></label> 
+            </div>
+
+            <!--Radio Options-->
+            <label class="container">Pendiente de Recogida
+              <input type="radio" id="RPendiente" name="radio">
+              <span class="checkmark"></span>
+            </label>
+            <label class="container">En oficina de Origen
+              <input type="radio" id="ROficina" name="radio">
+              <span class="checkmark"></span>
+            </label>
+            <!--Enviar y Cancelar-->
+            <ul class="tab-group">
+              <li class="tab active"><a id="submit" href="#signup">Submit</a></li>
+              <li class="tab"><a href="#login">Cancel</a></li>
+            </ul>
+      </form>
+
+    </div><!-- tab-content -->
+  </div> <!-- /form -->
+  <!-- FIN FORM -->
+</body>
+
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="envios.js"></script>
+<script src="formenvios.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+<!-- SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+</html>
