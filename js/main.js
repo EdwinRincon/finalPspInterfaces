@@ -11,7 +11,6 @@ var paginas = 0
 
 
 document.getElementById("inputBuscar").addEventListener("keyup", miBuscar);
-
 // filtrar en la tabla
 function miBuscar() {
     // Declare variables 
@@ -65,13 +64,11 @@ function miBuscar() {
 }
 
 function totalRegistros() {
-httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes')
+httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes/registros')
 httpreq.onload = function () {
     if (httpreq.readyState == 4) {
         if (httpreq.status == 200) {
             let datos = JSON.parse(this.responseText)
-            for (let item of datos) {
-                i++;}
             } else {
                 Swal.fire({
                     title: 'Error',
@@ -85,15 +82,26 @@ httpreq.onload = function () {
         }
     }
     httpreq.send();
-    return i;
 }
+
 function traerSoloDiez() {
+   
 
     if (empezaren <= 0) {
         document.getElementById("btnAnterior").style.display = "none"
     } else {
         document.getElementById("btnAnterior").style.display = "block"
     }
+    //usar metodo  totalRegistros(); en lugar de 200
+    if (empezaren >= (200-10)) {
+        document.getElementById("btnSiguiente").style.display = "none"
+    } else {
+        document.getElementById("btnSiguiente").style.display = "block"
+    }
+
+
+
+
     httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes/query?empezaren=' + empezaren)
     httpreq.onload = function () {
         if (httpreq.readyState == 4) {
@@ -114,7 +122,6 @@ function traerSoloDiez() {
                      <td>  <button  name="btnEliminar" id="botonEliminar${item.idCliente}"` + `  class="btn btn-danger"> <i class="fas fa-user-times"></i>  
                      </tr>
                      `
-                    i++;
                 }
                 /*Agrega accion click a cada boton despues de que se crean todos los registros*/
                 addActionsBtn();
@@ -209,7 +216,7 @@ function llenarEnvio() {
             let datos = JSON.parse(httpreq.responseText)
             let cliente = JSON.stringify(datos);
             localStorage.setItem("cliente", cliente);
-            window.location.href = './tipo_envio.html';
+            window.location.href = '../html/tipo_envio.html';
             } else {
                 Swal.fire({
                     title: 'Error',
@@ -284,11 +291,7 @@ httpreq.onload = function () {
 });
 
 
-
-
-
-
-
+// Paginacion
 document.getElementById('btnSiguiente').addEventListener("click", function () {
     empezaren += 10;
     traerSoloDiez();

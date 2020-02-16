@@ -18,11 +18,11 @@
 
 
  ### Gestión de Clientes:
-![Imagen CEEPExpress](ceepexpress.PNG)
+![Imagen CEEPExpress](img/ceepexpress.PNG)
 
  ### Gestión Envíos:
-![Imagen Seleccionar Envios](envios1.PNG) 
-![Imagen Envios](formulario1.png)
+![Imagen Seleccionar Envios](img/envios1.PNG) 
+![Imagen Envios](img/formulario1.png)
 
 * Tecnologías utilizadas:
     * Fontend:
