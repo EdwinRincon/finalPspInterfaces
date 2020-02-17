@@ -64,7 +64,9 @@ function miBuscar() {
 }
 
 function totalRegistros() {
+    
 httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes/registros')
+
 httpreq.onload = function () {
     if (httpreq.readyState == 4) {
         if (httpreq.status == 200) {
@@ -85,7 +87,7 @@ httpreq.onload = function () {
 }
 
 function traerSoloDiez() {
-   
+        totalRegistros()
 
     if (empezaren <= 0) {
         document.getElementById("btnAnterior").style.display = "none"
@@ -238,13 +240,25 @@ httpreq.open('DELETE', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes/' 
 httpreq.onload = function () {
     if (httpreq.readyState == 4) {
         if (httpreq.status == 200) {
-            Swal.fire({
-                title: 'Cliente Eliminado',
-                text: 'Se ha borrado un registro',
-                icon: 'success',
-                onClose: () => {
-                window.location.reload(true)
-                }})
+            let datos = JSON.parse(httpreq.responseText)
+            if(datos == 0){
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Cliente no eliminado',
+                    icon: 'error',
+                    onClose: () => {
+                        window.location.reload(true)
+                    }
+                })
+            }else{
+                Swal.fire({
+                    title: 'Cliente Eliminado',
+                    text: 'Se ha borrado un registro',
+                    icon: 'success',
+                    onClose: () => {
+                    window.location.reload(true)
+                    }})   
+            }
                 } else {
                     Swal.fire({
                         title: 'Error',
@@ -262,33 +276,46 @@ httpreq.onload = function () {
 }
 
 // AÑADIR CLIENTE
+/*
 document.getElementById('btnInsertar').addEventListener("click", function () {
-let cliente = {
-    "CIFNIF": document.getElementById("inputcifnif").value,
-    "direccionFacturacion": document.getElementById("inputdir").value,
-    "idCliente": 0,
-    "nombreCliente": document.getElementById("inputnombre").value
+   var expNombre = new RegExp('/^[a-zA-Z0-9_]{5,30}$/');
+   var expCIFNIF = new RegExp('^[0-9]+$');
+   var expAddress = new RegExp('');
+    if(expNombre.test(document.getElementById("inputnombre").value) && expCIFNIF.test('^[0-9]+$') && )
+function addCliente(){
+   
 }
-httpreq.open('POST', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes')
-httpreq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-let jsonstring = JSON.stringify(cliente)
-httpreq.send(jsonstring)
-httpreq.onload = function () {
-        if (httpreq.readyState == 4) {
-            if (httpreq.status == 200) {
-                Swal.fire({
-                    title: 'Cliente Creado',
-                    text: 'Se ha creado un registro',
-                    icon: 'success',
-                    onClose: () => {
-                    window.location.reload(true)
-                    }
-                });
+});
+*/
+document.getElementById('btnInsertar').addEventListener("click", function () {
+
+    let cliente = {
+        "CIFNIF": document.getElementById("inputcifnif").value,
+        "direccionFacturacion": document.getElementById("inputdir").value,
+        "idCliente": 0,
+        "nombreCliente": document.getElementById("inputnombre").value
+    }
+    httpreq.open('POST', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes')
+    httpreq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    let jsonstring = JSON.stringify(cliente)
+    httpreq.send(jsonstring)
+    httpreq.onload = function () {
+            if (httpreq.readyState == 4) {
+                if (httpreq.status == 200) {
+                    Swal.fire({
+                        title: 'Cliente Creado',
+                        text: 'Se ha creado un registro',
+                        icon: 'success',
+                        onClose: () => {
+                        window.location.reload(true)
+                        }
+                    });
+                }
             }
         }
-    }
-    
+
 });
+
 
 
 // Paginacion
@@ -302,3 +329,4 @@ document.getElementById('btnAnterior').addEventListener("click", function () {
     empezaren -= 10;
     traerSoloDiez();
 })
+

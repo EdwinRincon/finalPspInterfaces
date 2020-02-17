@@ -32,7 +32,7 @@ httpreq.onload = function () {
 document.getElementById("select").addEventListener("change", function() {
     if(document.getElementById("select").value != "Elegir Destinatario")
     {
-        var aux_nameDestinatario = document.getElementById("select").value
+    var aux_nameDestinatario = document.getElementById("select").value
     httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/destinatarios/name/'+"\""+aux_nameDestinatario+"\"")
     httpreq.onload = function () {
         if (httpreq.readyState == 4) {
