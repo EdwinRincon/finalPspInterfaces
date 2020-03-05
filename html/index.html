@@ -50,10 +50,10 @@
       <table id="myTable" class="table  table-hover table-bordered table-striped">
         <thead id="encabezados" class="thead-dark">
           <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>CIF/NIF</th>
-            <th>Dirección Facturación</th>
+            <th id="thId">ID <i  class="fas fa-arrow-alt-circle-down"></i></th>
+            <th id="thNombre">Nombre  <i  class="fas fa-arrow-alt-circle-down"></i></th>
+            <th id="thCifNif">CIF/NIF <i  class="fas fa-arrow-alt-circle-down"></i></th>
+            <th id="thDireccionFacturacion">Dirección Facturación <i  class="fas fa-arrow-alt-circle-down"></i></th>
             <th>Editar</th>
             <th>Envío</th>
             <th>Eliminar</th>
@@ -68,8 +68,13 @@
     
       <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
-            <button class="btn btn-primary" id="btnAnterior"  tabindex="-1" >Anterior</button>
+          <div class="btn-group">
+          <button class="btn btn-primary" id="btnInicio">Comienzo</button>
+          <button class="btn btn-primary" id="btnAnterior"  tabindex="-1" >Anterior</button>
           <button class="btn btn-primary" id="btnSiguiente">Siguiente</button>
+          <button class="btn btn-primary" id="btnFinal">Final</button>
+          </div>
+          
           </li>
         </ul>
       </nav>
@@ -169,10 +174,6 @@
     <!--Fin modal editar cliente-->
   </main><!-- /.container -->
 </body>
-<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script> -->
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>

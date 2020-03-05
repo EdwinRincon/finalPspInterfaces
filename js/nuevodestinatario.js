@@ -4,12 +4,12 @@ datosCliente = JSON.parse(cliente);
 /**--------------------------------------------------------NUEVO DESTINATARIO FORM-----------------------------------------------------**/
 document.getElementById("newsubmit").addEventListener("click", function () {
     var datosNuevos = {
-        "DNINIF":document.getElementById("newindni").value,
-        "codigoPostal":document.getElementById("newincp").value ,
-        "direccionCompleta": document.getElementById("newindireccion").value,
         "idDestinatario": 0,
+        "nombreDestinatario":  document.getElementById("newinnombreDes").value,
+        "dninif":document.getElementById("newindni").value,
         "idcliente": datosCliente.idCliente,
-        "nombreDestinatario":  document.getElementById("newinnombreDes").value
+        "codigoPostal": document.getElementById("newincp").value,
+        "direccionCompleta": document.getElementById("newindireccion").value
         };
         var datosCreados = JSON.stringify(datosNuevos)
         httpreq.open('POST', 'http://localhost:8080/EjemploRestJDBC/webapi/destinatarios', true)

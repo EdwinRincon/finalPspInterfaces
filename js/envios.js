@@ -7,10 +7,10 @@ var estadoEnvioChecked
 
 function traerNombre() {
 cliente = localStorage.getItem('cliente')
-datosCliente = JSON.parse(cliente);
-document.getElementById("nombre").innerText = datosCliente.nombreCliente
+datosCliente = JSON.parse(cliente);  
+document.getElementById("nombre").innerText = datosCliente[0].nombreCliente
 
-httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/destinatarios/' + datosCliente.idCliente)
+httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/destinatarios/' + datosCliente[0].idCliente)
 httpreq.onload = function () {
     if (httpreq.readyState == 4) {
         if (httpreq.status == 200) {
@@ -38,8 +38,10 @@ document.getElementById("select").addEventListener("change", function() {
         if (httpreq.readyState == 4) {
             if (httpreq.status == 200) {
                 let datosDestinatario = JSON.parse(this.responseText)
+                console.log(datosDestinatario);
+                
                 document.getElementById("innombreDes").value = datosDestinatario.nombreDestinatario;
-                document.getElementById("indni").value = datosDestinatario.DNINIF;
+                document.getElementById("indni").value = datosDestinatario.dninif;
                 document.getElementById("indireccion").value = datosDestinatario.direccionCompleta;
                 document.getElementById("incp").value = datosDestinatario.codigoPostal; 
                 idDestinatario= datosDestinatario.idDestinatario

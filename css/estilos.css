@@ -33,3 +33,21 @@
     border: 1px solid #ddd; /* Add a grey border */
     margin-bottom: 12px; /* Add some space below the input */
 }
+
+
+#thId:hover,#thNombre:hover,#thCifNif:hover,#thDireccionFacturacion:hover{
+animation-name: colorsRow;
+animation-duration: 1.5s;
+animation-fill-mode: forwards;
+}
+
+@keyframes colorsRow {
+    from {color: rgb(72, 115, 253);}
+    to {color: rgb(0, 255, 157);}
+  }
+
+
+
+
+.mostar{display:block;}
+.ocultar{display:none;}

@@ -1,4 +1,4 @@
-window.onload = traerSoloDiez;
+window.onload = main;
 var httpreq = new XMLHttpRequest();
 var createRowa = document.createElement("tr");
 var arraybtnedit = [];
@@ -6,71 +6,37 @@ var arraybtndel = [];
 var i = 0;
 var aux_id;
 var id;
-var empezaren = 0
-var paginas = 0
+var limit=0;
+var paginas = 0;
+var totalRegistross = totalRegistros();
+var ordenacion = "idCliente"
 
-
-document.getElementById("inputBuscar").addEventListener("keyup", miBuscar);
-// filtrar en la tabla
-function miBuscar() {
-    // Declare variables 
-    var input, filter, table, tr, td, i, j, visible;
-    input = document.getElementById("inputBuscar");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("myTable");
-    tr = table.getElementsByTagName("tr");
-    let encabezados = document.querySelector('#encabezados');
-
-    // Loop through all table rows, and hide those who don't match the search query
-    for (i = 0; i < tr.length; i++) {
-        visible = false;
-        /* Obtenemos todas las celdas de la fila, no sólo la primera */
-        td = tr[i].getElementsByTagName("td");
-        for (j = 0; j < td.length; j++) {
-            if (td[j] && td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-                visible = true;
-            }
-        }
-        if (visible === true) {
-            encabezados.innerHTML = ""
-            encabezados.innerHTML = `
-            <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>CIF/NIF</th>
-            <th>Dirección Facturación</th>
-            <th>Editar</th>
-            <th>Envío</th>
-            <th>Eliminar</th>
-          </tr>
-                     `
-            tr[i].style.display = "";
-        } else {
-            tr[i].style.display = "none";
-            encabezados.innerHTML = ""
-            encabezados.innerHTML = `
-            <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>CIF/NIF</th>
-            <th>Dirección Facturación</th>
-            <th>Editar</th>
-            <th>Envío</th>
-            <th>Eliminar</th>
-          </tr>
-        `
-        }
-    }
+function main(){
+    traerSoloDiez(ordenacion,limit)
 }
 
-function totalRegistros() {
-    
-httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes/registros')
 
-httpreq.onload = function () {
-    if (httpreq.readyState == 4) {
-        if (httpreq.status == 200) {
-            let datos = JSON.parse(this.responseText)
+// FILTRADO TABLA
+var textbuscar = document.getElementById("inputBuscar");
+textbuscar.onkeyup = function(){
+    var valorabuscar = (textbuscar.value).toLowerCase().trim();
+	var tabla_tr = document.getElementById("myTable").getElementsByTagName("tbody")[0].rows;
+	for(var i=0; i<tabla_tr.length; i++){
+		var tr = tabla_tr[i];
+		var textotr = (tr.innerText).toLowerCase();
+		tr.className = (textotr.indexOf(valorabuscar)>=0)?"mostrar":"ocultar";
+	}
+}
+
+
+
+function totalRegistros() {
+httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes/registros', false)
+    let datos; 
+    httpreq.onload = function () {
+        if (httpreq.readyState == 4) {
+            if (httpreq.status == 200) {
+                datos = parseInt(this.responseText)
             } else {
                 Swal.fire({
                     title: 'Error',
@@ -84,27 +50,30 @@ httpreq.onload = function () {
         }
     }
     httpreq.send();
+    return datos;
 }
 
-function traerSoloDiez() {
-        totalRegistros()
 
-    if (empezaren <= 0) {
+
+function traerSoloDiez(ordenacion,limit) {
+   
+    
+    // oculta los botones o los muestra si estan al final del limite de registros +- 
+    if (limit <= 0) {
         document.getElementById("btnAnterior").style.display = "none"
     } else {
         document.getElementById("btnAnterior").style.display = "block"
     }
-    //usar metodo  totalRegistros(); en lugar de 200
-    if (empezaren >= (200-10)) {
+    if (limit >= (totalRegistross-10)) {
         document.getElementById("btnSiguiente").style.display = "none"
     } else {
         document.getElementById("btnSiguiente").style.display = "block"
     }
 
 
-
-
-    httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes/query?empezaren=' + empezaren)
+   
+    // traer 10 registros, agrega eventos a los botones creados 
+    httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes?limit=' + limit + "&ordenacion=" + ordenacion)
     httpreq.onload = function () {
         if (httpreq.readyState == 4) {
             if (httpreq.status == 200) {
@@ -116,7 +85,7 @@ function traerSoloDiez() {
                      <tr> 
                      <td>  ${item.idCliente}  </td>
                      <td>  ${item.nombreCliente}  </td> 
-                     <td>  ${item.CIFNIF}  </td> 
+                     <td>  ${item.cIFNIF}  </td> 
                      <td>  ${item.direccionFacturacion}  </td>
                      <td>  <button name="btnEditar" id="botonEditar${item.idCliente}"` + `  class="btn  btn-warning" data-toggle="modal"
                      data-target="#ModalEditCliente"> <i class="fas fa-user-edit"></i></td>
@@ -146,16 +115,16 @@ function addActionsBtn() {
     $('[name=btnEditar]').on('click', function (e) {
         id = $(this).attr("id")
         aux_id = id.replace("botonEditar", "")
-        httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes/' + aux_id, true)
+        httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes?cliente=' + aux_id, true)
         httpreq.send();
         httpreq.onload = function () {
             if (httpreq.readyState == 4) {
                 if (httpreq.status == 200) {
                     //rellena los datos del cliente seleccionado en los campos del model 
                     let datos = JSON.parse(httpreq.responseText)
-                    document.getElementById("inputeditarcifnif").value = datos.CIFNIF;
-                    document.getElementById("inputeditardir").value = datos.direccionFacturacion;
-                    document.getElementById("inputeditarnombre").value = datos.nombreCliente;
+                    document.getElementById("inputeditarcifnif").value = datos[0].cIFNIF;
+                    document.getElementById("inputeditardir").value = datos[0].direccionFacturacion;
+                    document.getElementById("inputeditarnombre").value = datos[0].nombreCliente;
 
                     // cuando le de click al boton guardar edicion del model en editar cliente
                     document.getElementById("btnModificar").addEventListener("click", function () {
@@ -163,10 +132,10 @@ function addActionsBtn() {
                         let direccion = document.getElementById("inputeditardir").value
                         let nombrecliente = document.getElementById("inputeditarnombre").value
                         var datosActualizar = {
-                            "CIFNIF": cifnif,
-                            "direccionFacturacion": direccion,
                             "idCliente": datos.idCliente,
-                            "nombreCliente": nombrecliente
+                            "nombreCliente": nombrecliente,
+                            "cIFNIF": cifnif,
+                            "direccionFacturacion": direccion
                         };
                         var datosEditados = JSON.stringify(datosActualizar)
                         httpreq.open('PUT', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes', true)
@@ -207,7 +176,7 @@ function addActionsBtn() {
 $('[name=btnEnvio]').on('click', function (e) {
 id = $(this).attr("id")
 aux_id = id.replace("botonEnvio", "")
-httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes/' + aux_id)
+httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes?cliente=' + aux_id)
 httpreq.onload = llenarEnvio
 httpreq.send();
 })
@@ -290,10 +259,10 @@ function addCliente(){
 document.getElementById('btnInsertar').addEventListener("click", function () {
 
     let cliente = {
-        "CIFNIF": document.getElementById("inputcifnif").value,
-        "direccionFacturacion": document.getElementById("inputdir").value,
         "idCliente": 0,
-        "nombreCliente": document.getElementById("inputnombre").value
+        "nombreCliente": document.getElementById("inputnombre").value,
+        "cIFNIF": document.getElementById("inputcifnif").value,
+        "direccionFacturacion": document.getElementById("inputdir").value        
     }
     httpreq.open('POST', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes')
     httpreq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -302,31 +271,76 @@ document.getElementById('btnInsertar').addEventListener("click", function () {
     httpreq.onload = function () {
             if (httpreq.readyState == 4) {
                 if (httpreq.status == 200) {
-                    Swal.fire({
-                        title: 'Cliente Creado',
-                        text: 'Se ha creado un registro',
-                        icon: 'success',
-                        onClose: () => {
-                        window.location.reload(true)
+                    let datos = JSON.parse(httpreq.responseText)
+                    if(datos == 0){
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Cliente no insertado',
+                            icon: 'error',
+                            onClose: () => {
+                                window.location.reload(true)
+                            }
+                        })
+                    }else{
+                        Swal.fire({
+                            title: 'Cliente Creado',
+                            text: 'Se ha hecho un nuevo registro',
+                            icon: 'success',
+                            onClose: () => {
+                            window.location.reload(true)
+                            }})   
+                    }
+                        } else {
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'La conexión al servidor falló.',
+                                icon: 'question',
+                                onClose: () => {
+                                window.location.reload(true)
+                                }
+                            })
                         }
-                    });
-                }
             }
         }
 
 });
 
+// ORDENAR CAMPOS FLECHAS
+document.getElementById("thId").addEventListener("click", function () {
+    traerSoloDiez("IdCliente",limit);
+});
+document.getElementById("thNombre").addEventListener("click", function () {
+    traerSoloDiez("nombreCliente",limit);
+});
+document.getElementById("thCifNif").addEventListener("click", function () {
+    traerSoloDiez("cIFNIF",limit);
+});
+
+document.getElementById("thDireccionFacturacion").addEventListener("click", function () {
+    traerSoloDiez("direccionFacturacion",limit);
+});
 
 
 // Paginacion
 document.getElementById('btnSiguiente').addEventListener("click", function () {
-    empezaren += 10;
-    traerSoloDiez();
+    limit += 10;
+        traerSoloDiez("idCliente",limit);
+});
+    
+document.getElementById('btnAnterior').addEventListener("click", function () {
+    limit -= 10;
+    traerSoloDiez("idCliente",limit);
+});
+    
+document.getElementById('btnFinal').addEventListener("click", function () {
+    limit = totalRegistross - 10;
+    traerSoloDiez("idCliente",limit);
+});
+document.getElementById('btnInicio').addEventListener("click", function () {
+    limit = 0;
+    traerSoloDiez("idCliente",limit);
 });
 
-document.getElementById('btnAnterior').addEventListener("click", function () {
 
-    empezaren -= 10;
-    traerSoloDiez();
-})
+
 
