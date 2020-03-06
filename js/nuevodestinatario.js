@@ -7,10 +7,12 @@ document.getElementById("newsubmit").addEventListener("click", function () {
         "idDestinatario": 0,
         "nombreDestinatario":  document.getElementById("newinnombreDes").value,
         "dninif":document.getElementById("newindni").value,
-        "idcliente": datosCliente.idCliente,
+        "idCliente": datosCliente[0].idCliente,
         "codigoPostal": document.getElementById("newincp").value,
         "direccionCompleta": document.getElementById("newindireccion").value
         };
+
+        console.log(datosCliente[0].idCliente);
         var datosCreados = JSON.stringify(datosNuevos)
         httpreq.open('POST', 'http://localhost:8080/EjemploRestJDBC/webapi/destinatarios', true)
         httpreq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");

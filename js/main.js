@@ -9,10 +9,12 @@ var id;
 var limit=0;
 var paginas = 0;
 var totalRegistross = totalRegistros();
-var ordenacion = "idCliente"
+var ordenacion = "idCliente";
+var ascDesc=1;
+var sw = false;
 
 function main(){
-    traerSoloDiez(ordenacion,limit)
+    traerSoloDiez(ordenacion,limit,1)
 }
 
 
@@ -55,7 +57,7 @@ httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes/regis
 
 
 
-function traerSoloDiez(ordenacion,limit) {
+function traerSoloDiez(ordenacion,limit,ascDesc) {
    
     
     // oculta los botones o los muestra si estan al final del limite de registros +- 
@@ -66,14 +68,18 @@ function traerSoloDiez(ordenacion,limit) {
     }
     if (limit >= (totalRegistross-10)) {
         document.getElementById("btnSiguiente").style.display = "none"
+       // added
+       document.getElementById("btnFinal").style.display="none"
     } else {
         document.getElementById("btnSiguiente").style.display = "block"
+        // added
+       document.getElementById("btnFinal").style.display="block"
     }
 
 
    
     // traer 10 registros, agrega eventos a los botones creados 
-    httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes?limit=' + limit + "&ordenacion=" + ordenacion)
+    httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/clientes?limit=' + limit + "&ordenacion=" + ordenacion+"&ascDesc="+ascDesc)
     httpreq.onload = function () {
         if (httpreq.readyState == 4) {
             if (httpreq.status == 200) {
@@ -132,7 +138,7 @@ function addActionsBtn() {
                         let direccion = document.getElementById("inputeditardir").value
                         let nombrecliente = document.getElementById("inputeditarnombre").value
                         var datosActualizar = {
-                            "idCliente": datos.idCliente,
+                            "idCliente": datos[0].idCliente,
                             "nombreCliente": nombrecliente,
                             "cIFNIF": cifnif,
                             "direccionFacturacion": direccion
@@ -143,15 +149,35 @@ function addActionsBtn() {
                         httpreq.onload = function () {
                             if (httpreq.readyState == 4) {
                                 if (httpreq.status == 200) {
-                                    Swal.fire({
-                                        title: 'Cliente Editado',
-                                        text: 'Se ha editado un registro',
-                                        icon: 'success',
-                                        onClose: () => {
+                                    let datos = JSON.parse(httpreq.responseText)
+                                    if(datos == 0){
+                                        Swal.fire({
+                                            title: 'Error',
+                                            text: 'Cliente no insertado',
+                                            icon: 'error',
+                                            onClose: () => {
+                                                window.location.reload(true)
+                                            }
+                                        })
+                                    }else{
+                                        Swal.fire({
+                                            title: 'Cliente Creado',
+                                            text: 'Se ha hecho un nuevo registro',
+                                            icon: 'success',
+                                            onClose: () => {
                                             window.location.reload(true)
+                                            }})   
+                                    }
+                                        } else {
+                                            Swal.fire({
+                                                title: 'Error',
+                                                text: 'La conexión al servidor falló.',
+                                                icon: 'question',
+                                                onClose: () => {
+                                                window.location.reload(true)
+                                                }
+                                            })
                                         }
-                                    });
-                                }
                             }
                         }
                         httpreq.send(datosEditados)
@@ -244,18 +270,7 @@ httpreq.onload = function () {
     })
 }
 
-// AÑADIR CLIENTE
-/*
-document.getElementById('btnInsertar').addEventListener("click", function () {
-   var expNombre = new RegExp('/^[a-zA-Z0-9_]{5,30}$/');
-   var expCIFNIF = new RegExp('^[0-9]+$');
-   var expAddress = new RegExp('');
-    if(expNombre.test(document.getElementById("inputnombre").value) && expCIFNIF.test('^[0-9]+$') && )
-function addCliente(){
-   
-}
-});
-*/
+ 
 document.getElementById('btnInsertar').addEventListener("click", function () {
 
     let cliente = {
@@ -305,42 +320,52 @@ document.getElementById('btnInsertar').addEventListener("click", function () {
 
 });
 
+function tipoAscOrDesc() {
+    if (sw == true) {
+        ascDesc=1
+        sw=false
+    } else {
+        ascDesc = 0
+        sw=true
+    }
+    return ascDesc;
+}
+
 // ORDENAR CAMPOS FLECHAS
 document.getElementById("thId").addEventListener("click", function () {
-    traerSoloDiez("IdCliente",limit);
+    traerSoloDiez("IdCliente",limit,tipoAscOrDesc());
 });
 document.getElementById("thNombre").addEventListener("click", function () {
-    traerSoloDiez("nombreCliente",limit);
+    traerSoloDiez("nombreCliente",limit,tipoAscOrDesc());
 });
 document.getElementById("thCifNif").addEventListener("click", function () {
-    traerSoloDiez("cIFNIF",limit);
+    traerSoloDiez("cIFNIF",limit,tipoAscOrDesc());
 });
 
 document.getElementById("thDireccionFacturacion").addEventListener("click", function () {
-    traerSoloDiez("direccionFacturacion",limit);
+    traerSoloDiez("direccionFacturacion",limit,tipoAscOrDesc());
 });
 
 
 // Paginacion
 document.getElementById('btnSiguiente').addEventListener("click", function () {
     limit += 10;
-        traerSoloDiez("idCliente",limit);
+        traerSoloDiez("idCliente",limit,1);
 });
-    
+
 document.getElementById('btnAnterior').addEventListener("click", function () {
     limit -= 10;
-    traerSoloDiez("idCliente",limit);
+    traerSoloDiez("idCliente",limit,1);
 });
-    
+
 document.getElementById('btnFinal').addEventListener("click", function () {
     limit = totalRegistross - 10;
-    traerSoloDiez("idCliente",limit);
+    traerSoloDiez("idCliente",limit,1);
 });
 document.getElementById('btnInicio').addEventListener("click", function () {
     limit = 0;
-    traerSoloDiez("idCliente",limit);
+    traerSoloDiez("idCliente",limit,1);
 });
-
 
 
 

@@ -11,6 +11,7 @@ datosCliente = JSON.parse(cliente);
 document.getElementById("nombre").innerText = datosCliente[0].nombreCliente
 
 httpreq.open('GET', 'http://localhost:8080/EjemploRestJDBC/webapi/destinatarios/' + datosCliente[0].idCliente)
+
 httpreq.onload = function () {
     if (httpreq.readyState == 4) {
         if (httpreq.status == 200) {
@@ -78,7 +79,7 @@ document.getElementById("submit").addEventListener("click", function () {
 
 
 var datosActualizar = {
-"DNINIF":document.getElementById("indni").value,
+"dninif":document.getElementById("indni").value,
 "codigoPostal":document.getElementById("incp").value ,
 "direccionCompleta": document.getElementById("indireccion").value,
 "idDestinatario": idDestinatario,
@@ -96,14 +97,20 @@ httpreq.onload = function () {
 
 // INSERT nuevo envio
 let envio = {
-"DNINIF": document.getElementById("indni").value,
+"dninif": document.getElementById("indni").value,
 "codigoPostal": document.getElementById("incp").value,
 "direccionCompleta": document.getElementById("indireccion").value,
-"idCliente": datosCliente.idCliente,
+"idCliente": datosCliente[0].idCliente,
 "idEnvio": 0,
 "idEstadoEnvio": estadoEnvioChecked,
 "nombreDestinatario":  document.getElementById("innombreDes").value,
 "numIntentosEntrega": 0}
+console.log(document.getElementById("indni").value)
+console.log(document.getElementById("incp").value)
+console.log(document.getElementById("indireccion").value)
+console.log(document.getElementById("innombreDes").value)
+console.log(datosCliente[0].idCliente)
+
 
 httpreq.open('POST', 'http://localhost:8080/EjemploRestJDBC/webapi/envios')
 httpreq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
